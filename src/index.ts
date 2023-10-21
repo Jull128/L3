@@ -6,6 +6,8 @@ import { userService } from './services/user.service';
 
 new Router();
 cartService.init();
+console.log('qwe');
+
 userService.init();
 favoriteService.init();
 
