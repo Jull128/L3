@@ -33,6 +33,9 @@ class ProductDetail extends Component {
     this.view.price.innerText = formatPrice(salePriceU);
     this.view.btnBuy.onclick = this._addToCart.bind(this);
 
+    //добавить товар в избранное
+    //    this.view.btnFavorite.onclick = this._addToFavorite.bind(this);
+
     const isInCart = await cartService.isInCart(this.product);
 
     if (isInCart) this._setInCart();
@@ -56,6 +59,15 @@ class ProductDetail extends Component {
     cartService.addProduct(this.product);
     this._setInCart();
   }
+
+  /*
+  private _addToFavorite() {
+    if (!this.product) return;
+
+    favoriteService.addProduct(this.product);
+    this._setInFavorite();
+  }
+*/
 
   private _setInCart() {
     this.view.btnBuy.innerText = '✓ В корзине';
