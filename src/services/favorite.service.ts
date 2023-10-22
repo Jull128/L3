@@ -40,12 +40,20 @@ class FavoriteService {
   private async _updFavCounters() {
     const products = await this.get();
     const count = products.length >= 10 ? '9+' : products.length;
-
+    const favorLink = document.getElementById('favorLink') as HTMLElement;
     //@ts-ignore
     document.querySelectorAll('.js__favor-counter').forEach((element: Element) => {
       const $el = element as HTMLElement;
       $el.innerText = String(count || '');
     });
+
+    // Получаем данные из localforage
+    if (count === 0) {
+      // Если count равен 0, скрываем ссылку
+      favorLink.style.display = 'none';
+    } else {
+      favorLink.style.display = 'inline';
+    }
   }
 }
 

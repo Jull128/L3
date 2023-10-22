@@ -6,7 +6,6 @@ const DB = '__wb-cart';
 class CartService {
   init() {
     this._updCounters();
-    console.log('init', this._updCounters());
   }
 
   async addProduct(product: ProductData) {
@@ -25,15 +24,11 @@ class CartService {
   }
 
   async get(): Promise<ProductData[]> {
-    console.log(localforage.getItem(DB));
-
     return (await localforage.getItem(DB)) || [];
   }
 
   async set(data: ProductData[]) {
     await localforage.setItem(DB, data);
-    console.log('wow');
-
     this._updCounters();
   }
 
@@ -45,8 +40,6 @@ class CartService {
   private async _updCounters() {
     const products = await this.get();
     const count = products.length >= 10 ? '9+' : products.length;
-    console.log(count);
-
     //@ts-ignore
     document.querySelectorAll('.js__cart-counter').forEach(($el: HTMLElement) => ($el.innerText = String(count || '')));
   }
