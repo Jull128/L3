@@ -47,7 +47,6 @@ class FavoriteService {
       $el.innerText = String(count || '');
     });
 
-    // Получаем данные из localforage
     if (count === 0) {
       // Если count равен 0, скрываем ссылку
       favorLink.style.display = 'none';
