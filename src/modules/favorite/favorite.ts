@@ -1,7 +1,6 @@
 import { Component } from '../component';
 import { Product } from '../product/product';
 import html from './favorite.tpl.html';
-import { formatPrice } from '../../utils/helpers';
 import { ProductData } from 'types';
 import { favoriteService } from '../../services/favorite.service';
 
@@ -17,24 +16,10 @@ class Favorite extends Component {
     }
 
     this.products.forEach((product) => {
-      const productComp = new Product(product, { isHorizontal: true });
+      const productComp = new Product(product);
       productComp.render();
-      productComp.attach(this.view.cart);
+      productComp.attach(this.view.favorite);
     });
-
-    const totalPrice = this.products.reduce((acc, product) => (acc += product.salePriceU), 0);
-    this.view.price.innerText = formatPrice(totalPrice);
-
-    this.view.btnOrder.onclick = this._makeOrder.bind(this);
-  }
-
-  private async _makeOrder() {
-    await favoriteService.clear();
-    fetch('/api/makeOrder', {
-      method: 'POST',
-      body: JSON.stringify(this.products)
-    });
-    window.location.href = '/?isSuccessOrder';
   }
 }
 
