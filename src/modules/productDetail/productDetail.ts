@@ -5,6 +5,7 @@ import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
 import { favoriteService } from '../../services/favorite.service';
+import { sendEvent } from '../../index';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -25,6 +26,13 @@ class ProductDetail extends Component {
     this.product = await productResp.json();
 
     if (!this.product) return;
+    // Просмотр товара в списке товаров
+
+    if (this.product.log) {
+      sendEvent('viewCardPromo', this.product);
+    } else {
+      sendEvent('viewCard', this.product);
+    }
 
     const { id, src, name, description, salePriceU } = this.product;
 
@@ -33,17 +41,12 @@ class ProductDetail extends Component {
     this.view.description.innerText = description;
     this.view.price.innerText = formatPrice(salePriceU);
 
-    //добавить товар в избранное
-    // this.view.btnFavorite.onclick = this._addToFavorite.bind(this);
-
     const isInCart = await cartService.isInCart(this.product);
     cartService.init();
     if (isInCart) {
-      console.log('yes');
       this.view.btnBuy.onclick = this._removeToCart.bind(this);
       this._setInCart();
     } else {
-      console.log('no');
       this.view.btnBuy.onclick = this._addToCart.bind(this);
       this._removeInCart();
     }
@@ -52,17 +55,22 @@ class ProductDetail extends Component {
     const isInFavorite = await favoriteService.isInFavorite(this.product);
 
     if (isInFavorite) {
-      console.log('yes');
       this.view.btnFavorite.onclick = this._removeToFavorite.bind(this);
     } else {
-      console.log('no');
       this.view.btnFavorite.onclick = this._addToFavorite.bind(this);
     }
 
     fetch(`/api/getProductSecretKey?id=${id}`)
       .then((res) => res.json())
       .then((secretKey) => {
+        if (!this.product) return;
         this.view.secretKey.setAttribute('content', secretKey);
+        // просмотр товара
+        if (this.product.log) {
+          sendEvent('viewCardPromo', [this.product, secretKey]);
+        } else {
+          sendEvent('viewCard', [this.product, secretKey]);
+        }
       });
 
     fetch('/api/getPopularProducts')
@@ -74,6 +82,10 @@ class ProductDetail extends Component {
 
   private _addToCart() {
     if (!this.product) return;
+
+    // добавление товара в корзину
+    sendEvent('addToCard', this.product);
+
     this.render();
     cartService.addProduct(this.product);
     this._setInCart();
