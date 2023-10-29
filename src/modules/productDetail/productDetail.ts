@@ -80,6 +80,8 @@ class ProductDetail extends Component {
     })
       .then((res) => res.json())
       .then((products) => {
+        console.log(products);
+
         this.more.update(products);
       });
   }

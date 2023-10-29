@@ -1,5 +1,21 @@
 <div class="search">
-  Например <span class="search__example" data-tag="ex_1"></span>,
-  <span class="search__example" data-tag="ex_2"></span> или
-  <span class="search__example" data-tag="ex_3"></span>
+  <svg class="search__background">
+    <use xlink:href="#searchBackground"></use>
+  </svg>
+  <div class="search__input">
+    <svg class="search__icon">
+      <use xlink:href="#zoom"></use>
+    </svg>
+    <input type="text" placeholder="Искать на Wildberries" data-tag="searchInput" />
+    <svg class="search__icon">
+      <use xlink:href="#burger"></use>
+    </svg>
+  </div>
+  <div class="search__suggestions" data-tag="search_suggestions">
+    Например,
+    <span class="search__hint"></span>,
+    <span class="search__hint"></span>
+    или
+    <span class="search__hint"></span>
+  </div>
 </div>

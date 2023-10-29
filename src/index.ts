@@ -1,5 +1,4 @@
 import './icons';
-// import localforage from 'localforage';
 import Router from './router';
 import { cartService } from './services/cart.service';
 import { favoriteService } from './services/favorite.service';
