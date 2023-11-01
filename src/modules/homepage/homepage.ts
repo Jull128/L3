@@ -17,6 +17,7 @@ class Homepage extends Component {
   render() {
     fetch('/api/getPopularProducts', {
       headers: {
+        'Access-Control-Expose-Headers': 'x-userid',
         'x-userid': window.userId
       }
     })

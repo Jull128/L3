@@ -75,6 +75,7 @@ class ProductDetail extends Component {
 
     fetch('/api/getPopularProducts', {
       headers: {
+        'Access-Control-Expose-Headers': 'x-userid',
         'x-userid': window.userId
       }
     })
