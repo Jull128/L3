@@ -5,7 +5,7 @@ import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
 import { favoriteService } from '../../services/favorite.service';
-import { sendEvent } from '../../index';
+import { eventService } from '../../services/event.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -29,9 +29,17 @@ class ProductDetail extends Component {
     // Просмотр товара в списке товаров
 
     if (this.product.log) {
-      sendEvent('viewCardPromo', this.product);
+      eventService.send({
+        type: 'viewCardPromo',
+        payload: this.product,
+        timestamp: Date.now()
+      });
     } else {
-      sendEvent('viewCard', this.product);
+      eventService.send({
+        type: 'viewCard',
+        payload: this.product,
+        timestamp: Date.now()
+      });
     }
 
     const { id, src, name, description, salePriceU } = this.product;
@@ -67,9 +75,17 @@ class ProductDetail extends Component {
         this.view.secretKey.setAttribute('content', secretKey);
         // просмотр товара
         if (this.product.log) {
-          sendEvent('viewCardPromo', [this.product, secretKey]);
+          eventService.send({
+            type: 'viewCardPromo',
+            payload: { ...this.product, secretKey },
+            timestamp: Date.now()
+          });
         } else {
-          sendEvent('viewCard', [this.product, secretKey]);
+          eventService.send({
+            type: 'viewCard',
+            payload: { ...this.product, secretKey },
+            timestamp: Date.now()
+          });
         }
       });
 
@@ -84,7 +100,11 @@ class ProductDetail extends Component {
     if (!this.product) return;
 
     // добавление товара в корзину
-    sendEvent('addToCard', this.product);
+    eventService.send({
+      type: 'addToCard',
+      payload: this.product,
+      timestamp: Date.now()
+    });
 
     this.render();
     cartService.addProduct(this.product);

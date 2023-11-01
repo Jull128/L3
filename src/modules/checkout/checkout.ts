@@ -4,7 +4,7 @@ import html from './checkout.tpl.html';
 import { formatPrice } from '../../utils/helpers';
 import { cartService } from '../../services/cart.service';
 import { ProductData } from 'types';
-import { sendEvent } from '../../index';
+import { eventService } from '../../services/event.service';
 
 class Checkout extends Component {
   products!: ProductData[];
@@ -39,7 +39,11 @@ class Checkout extends Component {
       orderId: `ORDER-${Date.now()}`
     };
 
-    sendEvent('purchase', payload);
+    eventService.send({
+      type: 'purchse',
+      payload: payload,
+      timestamp: Date.now()
+    });
 
     //Оформление заказа
     fetch('/api/makeOrder', {
