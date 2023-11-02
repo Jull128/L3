@@ -20,11 +20,14 @@ export function sendEvent(type: string, payload: any) {
     payload: payload,
     timestamp: Date.now()
   };
+  console.log(event);
 
   fetch('/api/sendEvent', {
     method: 'POST',
     body: JSON.stringify(event)
-  });
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data));
 }
 
 // Переход по страницам

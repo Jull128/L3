@@ -6,6 +6,7 @@ import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
 import { favoriteService } from '../../services/favorite.service';
 import { sendEvent } from '../../index';
+import { userService } from '../../services/user.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -28,7 +29,7 @@ class ProductDetail extends Component {
     if (!this.product) return;
     // Просмотр товара в списке товаров
 
-    if (this.product.log) {
+    if (this.product.log.length > 0) {
       sendEvent('viewCardPromo', this.product);
     } else {
       sendEvent('viewCard', this.product);
@@ -65,18 +66,12 @@ class ProductDetail extends Component {
       .then((secretKey) => {
         if (!this.product) return;
         this.view.secretKey.setAttribute('content', secretKey);
-        // просмотр товара
-        if (this.product.log) {
-          sendEvent('viewCardPromo', [this.product, secretKey]);
-        } else {
-          sendEvent('viewCard', [this.product, secretKey]);
-        }
       });
 
+    const userId = await userService.getId();
     fetch('/api/getPopularProducts', {
       headers: {
-        'Access-Control-Expose-Headers': 'x-userid',
-        'x-userid': window.userId
+        'UserID': userId
       }
     })
       .then((res) => res.json())
