@@ -69,7 +69,6 @@ export class Search {
   render() {
     // поиск всех p для подсказок
     const suggestionArray = this.view.search_suggestions.children;
-    console.log(this.suggestions.length);
 
     for (let i = 0; i < suggestionArray.length; i++) {
       if (i < this.suggestions.length && this.suggestions[i]) {
