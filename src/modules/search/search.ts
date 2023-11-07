@@ -8,10 +8,10 @@ export class Search {
 
   constructor(props: any) {
     this.suggestions = props.suggestions || [];
+    // this.getSuggestions();
     this.view = new ViewTemplate(html).cloneView();
 
     this.getValueForInput();
-    // this.getSuggestions();
   }
 
   getValueForInput() {
