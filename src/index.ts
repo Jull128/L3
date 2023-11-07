@@ -13,12 +13,6 @@ setTimeout(() => {
   document.body.classList.add('is__ready');
 }, 250);
 
-declare global {
-  interface Window {
-    userId: string;
-  }
-}
-
 export function sendEvent(type: string, payload: any) {
   const event = {
     type: type,

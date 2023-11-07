@@ -3,25 +3,32 @@ import { Component } from '../component';
 import html from './homepage.tpl.html';
 
 import { ProductList } from '../productList/productList';
-import { searchComp } from '../search/search';
+import { Search } from '../search/search';
+import { userService } from '../../services/user.service';
+
+let suggestions = ['чехол iphone 13 pro', 'коляски agex', 'яндекс станция 2'];
 
 class Homepage extends Component {
   popularProducts: ProductList;
+  searchComp: Search;
 
   constructor(props: any) {
     super(props);
 
-    searchComp.attach(this.view.search);
-    searchComp.render();
+    this.searchComp = new Search({ suggestions });
+    this.searchComp.attach(this.view.search);
 
     this.popularProducts = new ProductList();
     this.popularProducts.attach(this.view.popular);
   }
 
-  render() {
+  async render() {
+    this.searchComp.update(suggestions);
+
+    const userId = await userService.getId();
     fetch('/api/getPopularProducts', {
       headers: {
-        'x-userid': window.userId
+        UserId: userId
       }
     })
       .then((res) => res.json())

@@ -1,66 +1,94 @@
 import { View } from '../../utils/view';
-import { Component } from '../component';
 import html from './search.tpl.html';
 import { ViewTemplate } from '../../utils/viewTemplate';
-import { ProductData } from '../../../types';
 
-class Search extends Component {
+export class Search {
   view: View;
-  suggestions: any[] = [];
+  suggestions: string[];
 
   constructor(props: any) {
-    super(props);
+    this.suggestions = props.suggestions || [];
     this.view = new ViewTemplate(html).cloneView();
-    this.getSuggestions();
+
+    this.getValueForInput();
+    // this.getSuggestions();
   }
 
-  getRandomItemFromArray<T>(array: T[]): T | undefined {
-    const randomIndex: number = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
-  }
-
-  async getSuggestions() {
-    let array: string[] = [];
-    fetch('/api/getPopularProducts', {
-      headers: {
-        'x-userid': window.userId
-      }
-    })
-      .then((res) => res.json())
-      .then((products: ProductData[]) => {
-        for (let i = 0; i < 3; i++) {
-          let element = this.getRandomItemFromArray(products);
-          if (element) {
-            array.push(element.name);
-          }
+  getValueForInput() {
+    this.view.root.addEventListener('click', (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target.getAttribute('data-tag') === 'btnSearch') {
+        // получем значение и вставлем в input
+        const btnSearchValue = target.innerText;
+        const inputElement = this.view.root.querySelector('input');
+        if (inputElement) {
+          inputElement.value = btnSearchValue;
         }
-        const suggestions = array.map((value) => ({ name: value }));
-        this.update(suggestions);
-      });
+      }
+    });
   }
+  // рандомный выбор наименований из списка продуктов
+  // getRandomItemFromArray<T>(array: T[]): T | undefined {
+  //   const randomIndex: number = Math.floor(Math.random() * array.length);
+  //   return array[randomIndex];
+  // }
+
+  // async getSuggestions() {
+  //   let array: string[] = [];
+
+  //   const userId = await userService.getId();
+  //   fetch('/api/getPopularProducts', {
+  //     headers: {
+  //        UserId: userId
+  //      }
+  //    })
+  //      .then((res) => res.json())
+  //      .then((products: ProductData[]) => {
+
+  //   for (let i = 0; i < 3; i++) {
+  //     let element = this.getRandomItemFromArray(products);
+  //     if (element) {
+  //       array.push(element);
+  //     }
+  //   }
+  //   const suggestions = array.map((value) => ({ name: value }));
+  //   this.update(suggestions);
+  //   });
+  // }
 
   attach($root: HTMLElement) {
     $root.innerHTML = '';
     $root.appendChild(this.view.root);
   }
 
-  update(data: any) {
-    this.suggestions = data;
+  update(suggestions: string[]) {
+    this.suggestions = suggestions;
     this.render();
   }
 
   render() {
-    // поиск всех спан для подсказок
+    // поиск всех p для подсказок
     const suggestionArray = this.view.search_suggestions.children;
+    console.log(this.suggestions.length);
 
     for (let i = 0; i < suggestionArray.length; i++) {
-      if (i < this.suggestions.length && this.suggestions[i] && this.suggestions[i].name) {
-        suggestionArray[i].innerHTML = `<p>${this.suggestions[i].name.toLowerCase()}</p>`;
+      if (i < this.suggestions.length && this.suggestions[i]) {
+        if (i === 0) {
+          suggestionArray[i].innerHTML = `Например &nbsp<p><span data-tag="btnSearch"> ${this.suggestions[
+            i
+          ].toLowerCase()}</span></p>`;
+        } else if (i === 1 && this.suggestions.length > 2) {
+          suggestionArray[i].innerHTML = `,&nbsp<p><span data-tag="btnSearch">${this.suggestions[
+            i
+          ].toLowerCase()} </span></p>`;
+        } else {
+          suggestionArray[i].innerHTML = `&nbsp или &nbsp<p><span data-tag="btnSearch">${this.suggestions[
+            i
+          ].toLowerCase()}</span></p>`;
+        }
       } else {
-        suggestionArray[i].innerHTML = ''; // Handle the case where data is missing
+        suggestionArray[i].innerHTML = '';
       }
     }
   }
 }
-
-export const searchComp = new Search(html);

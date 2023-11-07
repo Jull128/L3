@@ -60,21 +60,24 @@
     padding: 10px 20px;
     line-height: 24px;
 
-    span {
+    p {
       white-space: nowrap;
       border-radius: 8px;
-      background: var(--system-smoky, #f6f6fa);
       display: flex;
-      padding: 4px 6px 8px 6px;
-      align-items: flex-start;
+      align-items: baseline;
       cursor: pointer;
-      gap: 10px;
 
       p {
-        background: linear-gradient(93deg, #da15b8 4.93%, #8d06cc 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        padding: 4px 6px 8px 6px;
+        background: var(--system-smoky, #f6f6fa);
+        gap: 10px;
+
+        span {
+          background: linear-gradient(93deg, #da15b8 4.93%, #8d06cc 100%);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
       }
     }
   }

@@ -6,6 +6,7 @@ import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
 import { favoriteService } from '../../services/favorite.service';
 import { sendEvent } from '../../index';
+import { userService } from '../../services/user.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -72,10 +73,10 @@ class ProductDetail extends Component {
           sendEvent('viewCard', [this.product, secretKey]);
         }
       });
-
+    const userId = await userService.getId();
     fetch('/api/getPopularProducts', {
       headers: {
-        'x-userid': window.userId
+        UserId: userId
       }
     })
       .then((res) => res.json())
