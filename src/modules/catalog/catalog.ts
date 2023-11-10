@@ -2,6 +2,7 @@ import { Component } from '../component';
 import html from './catalog.tpl.html';
 
 import { ProductList } from '../productList/productList';
+import { eventService } from '../../services/event.service';
 
 class Catalog extends Component {
   productList: ProductList;
@@ -17,6 +18,18 @@ class Catalog extends Component {
     const productsResp = await fetch('/api/getProducts');
     const products = await productsResp.json();
     this.productList.update(products);
+    this._sendRoutes();
+  }
+
+  private _sendRoutes() {
+    const url = window.location.href;
+    const payload = { url };
+
+    eventService.send({
+      type: 'route',
+      payload: payload,
+      timestamp: Date.now()
+    });
   }
 }
 

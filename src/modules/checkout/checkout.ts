@@ -28,6 +28,7 @@ class Checkout extends Component {
     this.view.price.innerText = formatPrice(totalPrice);
 
     this.view.btnOrder.onclick = this._makeOrder.bind(this);
+    this._sendRoutes();
   }
 
   private async _makeOrder() {
@@ -51,6 +52,17 @@ class Checkout extends Component {
       body: JSON.stringify(this.products)
     });
     window.location.href = '/?isSuccessOrder';
+  }
+
+  private _sendRoutes() {
+    const url = window.location.href;
+    const payload = { url };
+
+    eventService.send({
+      type: 'route',
+      payload: payload,
+      timestamp: Date.now()
+    });
   }
 }
 

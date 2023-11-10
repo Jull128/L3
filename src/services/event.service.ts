@@ -6,8 +6,6 @@ type eventType = {
 
 class EventService {
   async send(event: eventType) {
-    console.log(event);
-
     try {
       const response = await fetch('/api/sendEvent', {
         method: 'POST',

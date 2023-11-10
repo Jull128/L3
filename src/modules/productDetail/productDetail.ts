@@ -22,6 +22,8 @@ class ProductDetail extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = Number(urlParams.get('id'));
 
+    this._sendRoutes();
+
     const productResp = await fetch(`/api/getProduct?id=${productId}`);
     this.product = await productResp.json();
 
@@ -140,6 +142,17 @@ class ProductDetail extends Component {
   private _removeInCart() {
     this.view.btnBuy.innerText = 'В корзину';
     // this.view.btnBuy.disabled = true;
+  }
+
+  private _sendRoutes() {
+    const url = window.location.href;
+    const payload = { url };
+
+    eventService.send({
+      type: 'route',
+      payload: payload,
+      timestamp: Date.now()
+    });
   }
 }
 

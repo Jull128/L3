@@ -3,6 +3,7 @@ import { Component } from '../component';
 import html from './homepage.tpl.html';
 
 import { ProductList } from '../productList/productList';
+import { eventService } from '../../services/event.service';
 
 class Homepage extends Component {
   popularProducts: ProductList;
@@ -29,6 +30,18 @@ class Homepage extends Component {
           'Заказ оформлен. Деньги спишутся с вашей карты, менеджер может позвонить, чтобы уточнить детали доставки'
       });
     }
+    this._sendRoutes();
+  }
+
+  private _sendRoutes() {
+    const url = window.location.href;
+    const payload = { url };
+
+    eventService.send({
+      type: 'route',
+      payload: payload,
+      timestamp: Date.now()
+    });
   }
 }
 
