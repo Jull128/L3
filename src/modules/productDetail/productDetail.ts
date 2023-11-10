@@ -33,17 +33,12 @@ class ProductDetail extends Component {
     this.view.description.innerText = description;
     this.view.price.innerText = formatPrice(salePriceU);
 
-    //добавить товар в избранное
-    // this.view.btnFavorite.onclick = this._addToFavorite.bind(this);
-
     const isInCart = await cartService.isInCart(this.product);
     cartService.init();
     if (isInCart) {
-      console.log('yes');
       this.view.btnBuy.onclick = this._removeToCart.bind(this);
       this._setInCart();
     } else {
-      console.log('no');
       this.view.btnBuy.onclick = this._addToCart.bind(this);
       this._removeInCart();
     }
@@ -52,10 +47,8 @@ class ProductDetail extends Component {
     const isInFavorite = await favoriteService.isInFavorite(this.product);
 
     if (isInFavorite) {
-      console.log('yes');
       this.view.btnFavorite.onclick = this._removeToFavorite.bind(this);
     } else {
-      console.log('no');
       this.view.btnFavorite.onclick = this._addToFavorite.bind(this);
     }
 
@@ -90,14 +83,12 @@ class ProductDetail extends Component {
     if (!this.product) return;
     this.render();
     favoriteService.addProduct(this.product);
-    // this._setInFavorite();
   }
 
   private _removeToFavorite() {
     if (!this.product) return;
     this.render();
     favoriteService.removeProduct(this.product);
-    // this._removeInCart();
   }
 
   private _setInCart() {
@@ -107,7 +98,7 @@ class ProductDetail extends Component {
 
   private _removeInCart() {
     this.view.btnBuy.innerText = 'В корзину';
-    // this.view.btnBuy.disabled = true;
+    // this.view.btnBuy.disabled = false;
   }
 }
 
